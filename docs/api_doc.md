@@ -68,7 +68,7 @@ Endpoints
 
 ### Login
 
-* Path: `/api/v1/user/authentication/login`
+* Path: `/api/v2/user/authentication/login`
 * Method: `POST`
 * Authenticate: `no`
 * Parameters:
@@ -122,7 +122,7 @@ user[password] | string | yes |
 
 ### Register
 
-* Path: `/api/v1/user/registration/register`
+* Path: `/api/v2/user/registration/register`
 * Method: `POST`
 * Authenticate: `no`
 * Parameters:
@@ -133,7 +133,6 @@ user[email] | string | yes | Max length `255`
 user[password] | string | yes | Length `6..128`
 user[first_name] | string | yes | Length `1..25`
 user[last_name] | string | no | Length `1..25`
-
 user[password] | string
 user[password_confirmation]
 
@@ -204,31 +203,22 @@ user[password_confirmation]
 {
     "http_status_code": 200,
     "user": {
-        "id": 1,
-        "first_name": "John",
-        "middle_name": null,
-        "last_name": "Doe",
-        "full_name": "John Doe",
-        "email": "john.doe@example.com",
-        "secondary_email": null,
-        "secondary_email_confirmed": null,
-        "level": "account_holder",
-        "email_confirmed": true,
-        "dob": "1990-01-01",
-        "gender": "male",
-        "contact_number": "123456",
-        "country": "US",
-        "avatar": {
-            "origin": "http://example.com/path/to/image.png",
-            "thumb": "http://example.com/path/to/image.png"
-        }
-    }
+        "id": 76,
+        "first_name": "Hida",
+        "last_name": "Isao",
+        "full_name": "Hida Isao",
+        "email": "isaohida@gmail.com",
+        "avatar": null,
+        "organisation": null,
+        "default_password": true
+    },
+    "access_token": "xxx"
 }
 ```
 
 ### Update profile
 
-* Path: `/api/v1/user/profile/update`
+* Path: `/api/v2/user/profile/update`
 * Method: `POST`
 * Authenticate: `yes`
 * Parameters:
@@ -236,27 +226,17 @@ user[password_confirmation]
 Field | Type | Required | Description
 --------- | ------- | ------- | -----------
 user[first_name] | string | yes | Length `1..25`
-user[middle_name] | string | no | Length `1..25`
 user[last_name] | string | no | Length `1..25`
-user[secondary_email] | string | yes | Max length `255`
-user[dob] | string | if user level is `account_holder` | Format `yyyy-mm-dd`
-user[gender] | string | yes | Allowed values: `male`, `female`, `other`
-user[contact_number] | string | yes | The phone or contact number. Length `0..50`. Free-form style.
-user[country] | string | if user level is `account_holder` | The country code. Length `2..50`
-user[avatar] | File | no | Attach as multipart form. Allowed mimes are `image/*`
+user[organisation] | string | yes | Max length `255`
 
 * Request example:
 
 ```json
 {
     "user": {
-        "secondary_email": "john.doe2@example.com",
         "first_name": "John",
-        "last_name": "Smith",
-        "dob": "1990-01-01",
-        "gender": "male",
-        "contact_number": "xxx",
-        "country": "US"
+        "last_name": "Smith",        
+        "organisation": "org"
     }
 }
 ```
@@ -266,25 +246,16 @@ user[avatar] | File | no | Attach as multipart form. Allowed mimes are `image/*`
 ```json
 {
     "http_status_code": 200,
+    "message": "Profile update successfully",
     "user": {
-        "id": 1,
-        "first_name": "John",
-        "middle_name": null,
-        "last_name": "Doe",
-        "full_name": "John Doe",
-        "email": "john.doe@example.com",
-        "secondary_email": "john.doe2@example.com",
-        "secondary_email_confirmed": false,
-        "level": "account_holder",
-        "email_confirmed": true,
-        "dob": "1990-01-01",
-        "gender": "male",
-        "contact_number": "123456",
-        "country": "US",
-        "avatar": {
-            "origin": "http://example.com/path/to/image.png",
-            "thumb": "http://example.com/path/to/image.png"
-        }
+        "id": 76,
+        "first_name": "Isao",
+        "last_name": "H",
+        "full_name": "Isao H",
+        "email": "isaohida@gmail.com",
+        "avatar": null,
+        "organisation": "Orga",
+        "default_password": true
     }
 }
 ```
@@ -302,51 +273,7 @@ user[avatar] | File | no | Attach as multipart form. Allowed mimes are `image/*`
                 "field": "first_name",
                 "message": "First name can not be blank"
             },
-            {
-                "field": "dob",
-                "message": "Date of birth is not a date"
-            }
         ]
-    }
-}
-```
-
-### Close account
-
-* Path: `/api/v1/user/profile/close_account`
-* Method: `POST`
-* Authenticate: `yes`
-* Parameters:
-
-Field | Type | Required | Description
---------- | ------- | ------- | -----------
-password | string | yes | The current password of user
-
-* Request example:
-
-```json
-{
-    "password": "secret"
-}
-```
-
-* **Success response (200 OK)**:
-
-```json
-{
-    "message": "You account has been closed. Thank you for use DSRT",
-    "http_status_code": 200
-}
-```
-
-* Failure response (400 Bad Request):
-
-```json
-{
-    "message": "Could not close account. The provided password is wrong",
-    "http_status_code": 400,
-    "error": {
-        "code": "BAD_PARAMETERS"
     }
 }
 ```
@@ -354,7 +281,7 @@ password | string | yes | The current password of user
 ## Password
 ### Update password
 
-* Path: `/api/v1/user/profile/update_password`
+* Path: `/api/v2/user/profile/update_password`
 * Method: `POST`
 * Authenticate: `yes`
 * Parameters:
@@ -362,12 +289,14 @@ password | string | yes | The current password of user
 Field | Type | Required | Description
 --------- | ------- | ------- | -----------
 user[password] | string | yes | Length `6..128`
+user[new_password] | string | yes | Length `6..128`
 
 * Request example:
 ```json
 {
     "user": {
-        "password": "newpass"
+        "password": "current_password",
+        "new_password":"new_password"
     }
 }
 ```
