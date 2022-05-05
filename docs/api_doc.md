@@ -806,36 +806,23 @@ report[carting_water_cmt]
 }
 ```
 
-### Update friendship
+### Static Content
 
-> Use to update a `pending` friendship. Change level or name for example.
-An new invitation email will send if level changed(except Grey List)
+> Static content
 
-* Path: `/api/v1/user/friendship/update_invitation`
-* Method: `POST`
-* Authenticate: `yes`
+* Path: `/api/v2/contents/page`
+* Method: `GET`
+* Authenticate: `no`
 * Parameters:
 
 Field | Type | Required | Description
 --------- | ------- | ------- | -----------
-user[level] | string | `yes` | The frienship level. Allowed values: `trusted_friend`, `lifelink`, `grey_list`
-user[email] | string | `yes` | Max length `255`
-user[first_name] | string | `yes` | Length `1..25`
-user[middle_name] | string | no | Length `1..25`
-user[last_name] | string | no | Length `1..25`
+key | string | `yes` | Possible values: `tac`, `pp`, `hh`
 
 * Request example:
 
 ```json
-{
-    "user" : {
-        "email": "someone1@example.com",
-        "first_name": "John",
-        "middle_name": "",
-        "last_name": "Smith",
-        "level": "trusted_friend"
-    }
-}
+/api/v2/contents/page?key=pp
 ```
 
 * **Success response(200 OK)**:
@@ -843,23 +830,14 @@ user[last_name] | string | no | Length `1..25`
 ```json
 {
     "http_status_code": 200,
-    "message": "The invitation has been updated successfully",
-    "user": {
-        "id": 1,
-        "email": "someone1@example.com",
-        "first_name": "Someone1",
-        "middle_name": null,
-        "last_name": null,
-        "full_name": "Someone1",
-        "level": "trusted_friend",
-        "status": "pending",
-        "avatar": {
-            "origin": "http://example.com/path/to/image.png",
-            "thumb": "http://example.com/path/to/image.png"
-        },
-        "mail_delivery_status": "pending",
-        "invite_sent_at": "2016-08-19T08:42:08.000Z",
-        "created_at": "2016-08-19T08:42:08.000Z"
+    "static_content": {
+        "id": 2,
+        "name": "Privacy policy",
+        "key": "pp",
+        "value": "<div>For more information please refer to the Department of Industry's Privacy Statement <a target=\"_blank\" rel=\"nofollow\" href=\"https://www.industry.nsw.gov.au/privacy\">https://www.industry.nsw.gov.au/privacy</a></div><div><br></div>",
+        "meta": null,
+        "created_at": "2017-12-11T15:31:45.000+11:00",
+        "updated_at": "2018-05-31T12:49:36.000+10:00"
     }
 }
 ```
@@ -868,16 +846,10 @@ user[last_name] | string | no | Length `1..25`
 
 ```json
 {
-    "message": "Failed to update invitation",
-    "http_status_code": 400,
+    "message": "An error has occurred",
+    "http_status_code": 404,
     "error": {
-        "code": "BAD_PARAMETERS",
-        "errors": [
-            {
-              "field": "first_name",
-              "message": "First name can't be blank"
-            }
-        ]
+        "code": "RESOURCE_NOT_FOUND"
     }
 }
 ```
