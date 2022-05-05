@@ -104,7 +104,7 @@ user[password] | string | yes |
         "organisation": null,
         "default_password": true
     },
-    "access_token": "a5e0dec79fb6838d00e003564c356a5969173fd22f54d0387e"
+    "access_token": "xxx"
 }
 ```
 
@@ -132,15 +132,10 @@ Field | Type | Required | Description
 user[email] | string | yes | Max length `255`
 user[password] | string | yes | Length `6..128`
 user[first_name] | string | yes | Length `1..25`
-user[middle_name] | string | no | Length `1..25`
 user[last_name] | string | no | Length `1..25`
-user[level] | string | yes | Allowed values: `account_holder`, `lifelink`
-user[dob] | string | if level is `account_holder` | Format `yyyy-mm-dd`
-user[gender] | string | yes | Allowed values: `male`, `female`, `other`
-user[contact_number] | string | yes | The phone or contact number. Length `0..50`. Free-form style.
-user[country] | string | if level is `account_holder` | The country code. Length `2..50`
-user[avatar] | File | no | Attach as multipart form. Allowed mimes are `image/*`
-invite_token | string | no | Token from a AH, TF, or LF invitation
+
+user[password] | string
+user[password_confirmation]
 
 * Request example:
 
@@ -151,13 +146,8 @@ invite_token | string | no | Token from a AH, TF, or LF invitation
         "first_name": "John",
         "last_name": "Smith",
         "password": "secret",
-        "level": "account_holder",
-        "dob": "1990-01-01",
-        "gender": "male",
-        "contact_number": "xxx",
-        "country": "US"
+        "password_confirmation": "secret",
     },
-    "invite_token": "xxx"
 }
 ```
 
@@ -167,28 +157,19 @@ invite_token | string | no | Token from a AH, TF, or LF invitation
 
 ```json
 {
-    "message": "Register successfully",
     "http_status_code": 200,
+    "message": "Thanks for register with us. You now can login to the DSRT",
     "user": {
-        "id": 1,
-        "first_name": "John",
-        "middle_name": null,
-        "last_name": "Doe",
-        "full_name": "John Doe",
-        "email": "john.doe@example.com",
-        "secondary_email": null,
-        "secondary_email_confirmed": null,
-        "level": "account_holder",
-        "email_confirmed": true,
-        "dob": "1990-01-01",
-        "gender": "male",
-        "contact_number": "123456",
-        "country": "US",
-        "avatar": {
-            "origin": "http://example.com/path/to/image.png",
-            "thumb": "http://example.com/path/to/image.png"
-        }
-    }
+        "id": 85,
+        "first_name": "test",
+        "last_name": "test2",
+        "full_name": "test test2",
+        "email": "isaohida@gmail.com",
+        "avatar": null,
+        "organisation": null,
+        "default_password": false
+    },
+    "access_token": "xxx"
 }
 ```
 
@@ -205,10 +186,6 @@ invite_token | string | no | Token from a AH, TF, or LF invitation
                 "field": "first_name",
                 "message": "First name can not be blank"
             },
-            {
-                "field": "gender",
-                "message": "Gender can not be blank"
-            }
         ]
     }
 }
