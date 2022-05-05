@@ -198,8 +198,7 @@ Field | Type | Required | Description
 --------- | ------- | ------- | -----------
 user[email] | string | yes | Max length `255`
 user[password] | string | yes | Length `6..128`
-user[first_name] | string | yes | Length `1..25`
-user[last_name] | string | no | Length `1..25`
+user[full_name] | string | yes | Length `1..25`
 user[password] | string
 user[password_confirmation]
 
