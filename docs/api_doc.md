@@ -544,8 +544,7 @@ password | string | yes | The current password of user
 ```
 
 ### Get report by id
-> Get account holders which following by current user
-> Also returns Notice of passing, Funeral details .. incase current user has permission
+> Get reports by id
 
 * Path: `/api/v2/reports/:report_id`
 * Method: `GET`
@@ -566,120 +565,215 @@ password | string | yes | The current password of user
 }
 ```
 
-### Add One
+### Update Report
 
-> Use to invite someone to become Trusted Friend/Recipient/Grey List of current user.
+> update a report
 
-* Path: `/api/v1/user/friendship/add_one`
+* Path: `/api/v2/reports/:id`
+* Method: `PUT`
+* Authenticate: `yes`
+* Parameters:
+
+Field | Type | Required | Description
+--------- | ------- | ------- | -----------
+report[id] | integer
+report[user_id] | integer
+report[image]
+report[latitude]
+report[longitude]
+report[rainfall]
+report[rainfall_cmt]
+report[based_on_a_rain_gauge]
+report[based_on_a_rain_gauge_cmt]
+report[manage_drought_condition]
+report[manage_drought_condition_cmt]
+report[drought_severity]
+report[drought_severity_cmt]
+report[drought_duration]
+report[drought_duration_cmt]
+report[drought_stage]
+report[drought_stage_cmt]
+report[land_use]
+report[land_use_cmt]
+report[pasture_mass]
+report[pasture_mass_cmt]
+report[percentage_cover]
+report[percentage_cover_cmt]
+report[percentage_green]
+report[percentage_green_cmt]
+report[have_you_been_trained_in_pasture_assessment]
+report[have_you_been_trained_in_pasture_assessment_cmt]
+report[farm_and_plantation_trees_or_shrubs]
+report[farm_and_plantation_trees_or_shrubs_cmt]
+report[livestock_type]
+report[livestock_type_cmt]
+report[condition_score]
+report[condition_score_cmt]
+report[herd_flock_management]
+report[herd_flock_management_cmt]
+report[stock_breeding]
+report[stock_breeding_cmt]
+report[last_grazing]
+report[last_grazing_cmt]
+report[survival_drought_or_hand_feeding]
+report[survival_drought_or_hand_feeding_cmt]
+report[feeding_duration]
+report[feeding_duration_cmt]
+report[stock_water]
+report[stock_water_cmt]
+report[crop_type]
+report[crop_type_cmt]
+report[crop_stage]
+report[crop_stage_cmt]
+report[dry_sown]
+report[dry_sown_cmt]
+report[crop_program]
+report[crop_program_cmt]
+report[current_yield_estimates]
+report[current_yield_estimates_cmt]
+report[has_your_crop_failed]
+report[has_your_crop_failed_cmt]
+report[crop_damage]
+report[crop_damage_cmt]
+report[stored_soil_water]
+report[stored_soil_water_cmt]
+report[based_on_soil_moisture_probe]
+report[based_on_soil_moisture_probe_cmt]
+report[farm_water]
+report[farm_water_cmt]
+report[natural_water]
+report[natural_water_cmt]
+report[carting_water]
+report[carting_water_cmt]
+
+* Request example:
+
+```json
+{
+    "report" : {
+        "latitude": "-33.321628",
+        "longitude": "149.085161"
+    }
+}
+```
+
+* **Success response(200 OK)**:
+
+```json
+{
+    "http_status_code": 200,
+    "message": "Report update successfully",
+    "report": {
+        "id": 13,
+        "image": null,
+        "latitude": "-33.321628",
+        "longitude": "149.085161",
+        ...........
+    }
+}
+```
+
+* Failure response(400 Bad Request):
+
+```json
+{
+    "message": "An error has occurred",
+    "http_status_code": 404,
+    "error": {
+        "code": "RESOURCE_NOT_FOUND"
+    }
+}
+```
+
+### Create Report
+> Create user report
+
+* Path: `/api/v2/reports`
 * Method: `POST`
 * Authenticate: `yes`
 * Parameters:
 
 Field | Type | Required | Description
 --------- | ------- | ------- | -----------
-user[level] | string | `yes` | The frienship level. Allowed values: `trusted_friend`, `lifelink`, `grey_list`
-user[email] | string | `yes` | Max length `255`
-user[first_name] | string | `yes` | Length `1..25`
-user[middle_name] | string | no | Length `1..25`
-user[last_name] | string | no | Length `1..25`
-
-* Request example:
-
-```json
-{
-    "user" : {
-        "email": "someone1@example.com",
-        "first_name": "John",
-        "middle_name": "",
-        "last_name": "Smith",
-        "level": "trusted_friend"
-    }
-}
-```
-
-* **Success response(200 OK)**:
-
-```json
-{
-    "http_status_code": 200,
-    "message": "Invitation created successfully",
-    "user": {
-        "id": 1,
-        "email": "someone1@example.com",
-        "first_name": "Someone1",
-        "middle_name": null,
-        "last_name": null,
-        "full_name": "Someone1",
-        "level": "trusted_friend",
-        "status": "pending",
-        "avatar": {
-            "origin": "http://example.com/path/to/image.png",
-            "thumb": "http://example.com/path/to/image.png"
-        },
-        "mail_delivery_status": "pending",
-        "invite_sent_at": "2016-08-19T08:42:08.000Z",
-        "created_at": "2016-08-19T08:42:08.000Z"
-    }
-}
-```
-
-* Failure response(400 Bad Request):
-
-```json
-{
-    "message": "Failed to create invitation",
-    "http_status_code": 400,
-    "error": {
-        "code": "BAD_PARAMETERS",
-        "errors": [
-            {
-              "field": "first_name",
-              "message": "First name can't be blank"
-            }
-        ]
-    }
-}
-```
-
-### Add Many
-> Use to add multiple invite users to become Trusted Friend/Recipient/Grey List of current user
-
-> Note: the response status always `200`! Check for `success_invitations` and `failure_invitations` with index of each entry in array of request body.
-
-* Path: `/api/v1/user/friendship/add_many`
-* Method: `POST`
-* Authenticate: `yes`
-* Parameters:
-
-> Same as `Add One` but passing users information in an array
-
-Field | Type | Required | Description
------------- | ------- | ------- | -----------
-users[level] | string | `yes` | The frienship level. Allowed values: `trusted_friend`, `lifelink`, `grey_list`
-users[email] | string | `yes` | Max length `255`
-users[first_name] | string | `yes` | Length `1..25`
-users[middle_name] | string | no | Length `1..25`
-users[last_name] | string | no | Length `1..25`
+report[id] | integer
+report[user_id] | integer
+report[image]
+report[latitude]
+report[longitude]
+report[rainfall]
+report[rainfall_cmt]
+report[based_on_a_rain_gauge]
+report[based_on_a_rain_gauge_cmt]
+report[manage_drought_condition]
+report[manage_drought_condition_cmt]
+report[drought_severity]
+report[drought_severity_cmt]
+report[drought_duration]
+report[drought_duration_cmt]
+report[drought_stage]
+report[drought_stage_cmt]
+report[land_use]
+report[land_use_cmt]
+report[pasture_mass]
+report[pasture_mass_cmt]
+report[percentage_cover]
+report[percentage_cover_cmt]
+report[percentage_green]
+report[percentage_green_cmt]
+report[have_you_been_trained_in_pasture_assessment]
+report[have_you_been_trained_in_pasture_assessment_cmt]
+report[farm_and_plantation_trees_or_shrubs]
+report[farm_and_plantation_trees_or_shrubs_cmt]
+report[livestock_type]
+report[livestock_type_cmt]
+report[condition_score]
+report[condition_score_cmt]
+report[herd_flock_management]
+report[herd_flock_management_cmt]
+report[stock_breeding]
+report[stock_breeding_cmt]
+report[last_grazing]
+report[last_grazing_cmt]
+report[survival_drought_or_hand_feeding]
+report[survival_drought_or_hand_feeding_cmt]
+report[feeding_duration]
+report[feeding_duration_cmt]
+report[stock_water]
+report[stock_water_cmt]
+report[crop_type]
+report[crop_type_cmt]
+report[crop_stage]
+report[crop_stage_cmt]
+report[dry_sown]
+report[dry_sown_cmt]
+report[crop_program]
+report[crop_program_cmt]
+report[current_yield_estimates]
+report[current_yield_estimates_cmt]
+report[has_your_crop_failed]
+report[has_your_crop_failed_cmt]
+report[crop_damage]
+report[crop_damage_cmt]
+report[stored_soil_water]
+report[stored_soil_water_cmt]
+report[based_on_soil_moisture_probe]
+report[based_on_soil_moisture_probe_cmt]
+report[farm_water]
+report[farm_water_cmt]
+report[natural_water]
+report[natural_water_cmt]
+report[carting_water]
+report[carting_water_cmt]
 
 * Request example:
 ```json
 {
-    "users": [
-        {
-            "email": "someone1@example.com",
-            "first_name": "Someone1",
-            "middle_name": "",
-            "last_name": "",
-            "level": "trusted_friend"
-        },
-        {
-            "email": "someone2@example.com",
-            "first_name": "Someone2",
-            "middle_name": "",
-            "last_name": "",
-            "level": "lifelink"
-        }
-    ]
+    "report": {
+        "user_id": 81,        
+        "latitude": "-33.321628",
+        "longitude": "149.085161",
+        ...........
+    }
 }
 ```
 
@@ -687,76 +781,28 @@ users[last_name] | string | no | Length `1..25`
 ```json
 {
     "http_status_code": 200,
-    "message": "The invitations created successfully",
-    "success_invitations": [
-        {
-          "id": 1,
-          "email": "someone1@example.com",
-          "first_name": "Someone1",
-          "middle_name": null,
-          "last_name": null,
-          "full_name": "Someone1",
-          "level": "trusted_friend",
-          "status": "pending",
-          "avatar": null,
-          "mail_delivery_status": null,
-          "invite_sent_at": null,
-          "created_at": "2016-08-20T04:50:29.797Z"
-        }
-    ],
-    "failure_invitations": [
-        {
-          "email": "someone2@example.com",
-          "first_name": "",
-          "level": "lifelink",
-          "index": 1,
-          "error": "First name can't be blank"
-        }
-    ]
-}
-```
-
-### Resend invitation email
-
-> Use to resend the invitation email to a `pending` TF or LL friendship
-
-* Path: `/api/v1/user/friendship/resend_invitation`
-* Method: `POST`
-* Authenticate: `yes`
-* Parameters:
-
-Field | Type | Required | Description
------------- | ------- | ------- | -----------
-user[email] | string | `yes` | Max length `255`.
-
-* Request example:
-```json
-{
-    "user": {
-        "email": "someone@example.com"
+    "message": "Report created successfully",
+    "report": {
+        "id": 14,
+        "latitude": null,
     }
 }
 ```
+
+### Delete a report
+
+> Report delete
+
+* Path: `/api/v2/reports/:id/delete`
+* Method: `DELETE`
+* Authenticate: `yes`
+* Parameters:
 
 * **Success respon(200 OK)**:
 ```JSON
 {
-    "message": "The invitation email has been sent successfully",
-    "http_status_code": 200
-}
-```
-
-* Failure response(400 Bad Request):
-
-> User must wait for 24 hours since the last time sent email
-
-```JSON
-{
-    "message": "Could not send the invitation. Please wait for a day to try this action",
-    "http_status_code": 400,
-    "error": {
-        "code": "BAD_REQUEST"
-    }
+    "http_status_code": 200,
+    "message": "Report delete successfully"
 }
 ```
 
