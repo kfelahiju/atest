@@ -120,6 +120,73 @@ user[password] | string | yes |
 }
 ```
 
+### Social Login
+
+* Path: `api/v2/user/authentication/social_login`
+* Method: `POST`
+* Authenticate: `no`
+* Parameters:
+
+Field | Type | Required | Description
+--------- | ------- | ------- | -----------
+user[email] | string | yes |
+user[first_name] | string | yes |
+user[last_name] | string | yes |
+user[provider_token] | String | yes
+user[provider] | String | yes
+
+* Request example:
+
+```json
+{
+    "user": {
+        "email": "isaohida@gmail.com",
+        "first_name": "Isao",
+        "last_name":"H",
+        "provider_token": "xxx",
+        "provider":"google"
+    }
+}
+```
+
+* **Success response (200 OK)**:
+
+```json
+{
+    "http_status_code": 200,
+    "message": "Login successfully",
+    "user": {
+        "id": 76,
+        "first_name": "Isao",
+        "last_name": "H",
+        "full_name": "Isao H",
+        "email": "isaohida@gmail.com",
+        "avatar": null,
+        "organisation": "Orga",
+        "default_password": true
+    },
+    "access_token": "xxx"
+}
+```
+
+* Failure response (401 Unauthorized):
+
+```json
+{
+    "message": "Failed to login. Please check for form errors",
+    "http_status_code": 400,
+    "error": {
+        "code": "BAD_PARAMETERS",
+        "errors": [
+            {
+                "field": "email",
+                "message": "Email is invalid"
+            }
+        ]
+    }
+}
+```
+
 ### Register
 
 * Path: `/api/v2/user/registration/register`
@@ -332,7 +399,7 @@ user[new_password] | string | yes | Length `6..128`
 > Use to make request to reset password if user has forgot
 > System will send a reset password instructions email if email exists
 
-* Path: `/api/v1/user/password/forgot`
+* Path: `/api/v2/user/password/forgot`
 * Method: `POST`
 * Authenticate: `no`
 * Parameters:
@@ -359,74 +426,120 @@ password | string | yes | The current password of user
 }
 ```
 
-## Friendship
-### Followers
-> Use to get user's Trusted friends, lifelinks and grey list
+## Report
+### Reports
+> Get user reports
 
-* Path: `/api/v1/user/friendship/followers`
+* Path: `/api/v2/reports`
 * Method: `GET`
 * Authenticate: `yes`
 * Parameters:
 
-Field | Type | Required | Description
---------- | ------- | ------- | -----------
-level | string | no | The filter for frienship level. Leave empty to get all. Allowed values: `trusted_friend`, `lifelink`, `grey_list`
-page | integer | no | The page number
-per | integer | no | The page size
-sort | string | no | The sort field. Sortable fields: `first_name`, `last_name`, `full_name`, `email`, `level`, `status`, `created_at`
-order | string | no | The sort direction
-
-* Request example:
-
-```json
-{
-    "level": "trusted_friend",
-    "page": 1,
-    "per": 10,
-    "sort": "first_name",
-    "order": "asc"
-}
-```
 
 * **Success response(200 OK)**:
 ```json
 {
     "http_status_code": 200,
-    "users": [
+    "reports": [
         {
-            "id": 1,
-            "email": "someone1@example.com",
-            "first_name": "Someone1",
-            "middle_name": null,
-            "last_name": null,
-            "level": "trusted_friend",
-            "status": "accepted",
-            "avatar": {
-                "origin": "http://example.com/path/to/image.png",
-                "thumb": "http://example.com/path/to/image.png"
-            },
-            "mail_delivery_status": null,
-            "invite_sent_at": null,
-            "created_at": "2016-08-19T08:42:08.000Z"
+            "id": 7,
+            "image": null,
+            "latitude": "-33.3216",
+            "longitude": "149.085",
+            "created_at": "19/Jul/2018 02:37PM",
+            "updated_at": "19/Jul/2018 02:37PM",
+            "surface_water": null,
+            "rivers_creeks": null,
+            "native_pasture": null,
+            "improved_pasture": null,
+            "crops": null,
+            "supplementary_cattle": null,
+            "supplementary_sheep": null,
+            "livestock_number_cattle": null,
+            "livestock_number_sheep": null,
+            "livestock_number_other": null,
+            "livestock_condition_cattle": null,
+            "livestock_condition_sheep": null,
+            "livestock_condition_other": null,
+            "surface_water_cmt": null,
+            "rivers_creeks_cmt": null,
+            "native_pasture_cmt": null,
+            "improved_pasture_cmt": null,
+            "crops_cmt": null,
+            "supplementary_cattle_cmt": null,
+            "livestock_number_cattle_cmt": null,
+            "livestock_number_sheep_cmt": null,
+            "livestock_number_other_cmt": null,
+            "livestock_condition_cattle_cmt": null,
+            "livestock_condition_sheep_cmt": null,
+            "livestock_condition_other_cmt": null,
+            "supplementary_sheep_cmt": null,
+            "rainfall": "<50mm",
+            "rainfall_cmt": "Ttttt",
+            "based_on_a_rain_gauge": "",
+            "based_on_a_rain_gauge_cmt": "",
+            "land_use": "",
+            "land_use_cmt": "",
+            "pasture_mass": "",
+            "pasture_mass_cmt": "",
+            "percentage_cover": "",
+            "percentage_cover_cmt": "",
+            "percentage_green": "",
+            "percentage_green_cmt": "",
+            "have_you_been_trained_in_pasture_assessment": "",
+            "have_you_been_trained_in_pasture_assessment_cmt": "",
+            "farm_and_plantation_trees_or_shrubs": "",
+            "farm_and_plantation_trees_or_shrubs_cmt": "",
+            "livestock_type": "",
+            "livestock_type_cmt": "",
+            "condition_score": "",
+            "condition_score_cmt": "",
+            "herd_flock_management": "",
+            "herd_flock_management_cmt": "",
+            "survival_drought_or_hand_feeding": "",
+            "survival_drought_or_hand_feeding_cmt": "",
+            "feeding_duration": "",
+            "feeding_duration_cmt": "",
+            "stock_water": "",
+            "stock_water_cmt": "",
+            "crop_type": "",
+            "crop_type_cmt": "",
+            "crop_stage": "",
+            "crop_stage_cmt": "",
+            "crop_program": null,
+            "crop_program_cmt": null,
+            "current_yield_estimates": "",
+            "current_yield_estimates_cmt": "",
+            "has_your_crop_failed": "",
+            "has_your_crop_failed_cmt": "",
+            "stored_soil_water": "",
+            "stored_soil_water_cmt": "",
+            "based_on_soil_moisture_probe": "",
+            "based_on_soil_moisture_probe_cmt": "",
+            "farm_water": "",
+            "farm_water_cmt": "",
+            "natural_water": "",
+            "natural_water_cmt": "",
+            "manage_drought_condition": "",
+            "manage_drought_condition_cmt": "",
+            "drought_severity": "",
+            "drought_severity_cmt": "",
+            "drought_duration": "",
+            "drought_duration_cmt": "",
+            "drought_stage": "",
+            "drought_stage_cmt": "",
+            "stock_breeding": "",
+            "stock_breeding_cmt": "",
+            "last_grazing": "",
+            "last_grazing_cmt": "",
+            "crop_damage": "",
+            "crop_damage_cmt": "",
+            "dry_sown": "",
+            "dry_sown_cmt": "",
+            "carting_water": "",
+            "carting_water_cmt": ""
         },
-        {
-            "id": 2,
-            "email": "someone2@example.com",
-            "first_name": "Someone2",
-            "middle_name": null,
-            "last_name": null,
-            "level": "lifelink",
-            "status": "accepted",
-            "avatar": null,
-            "mail_delivery_status": null,
-            "invite_sent_at": null,
-            "created_at": "2016-08-19T08:34:48.000Z"
-        }
-    ],
-    "total": 2,
-    "per": 10,
-    "sort": "created_at",
-    "order": "desc"
+    ]
 }
 ```
 
