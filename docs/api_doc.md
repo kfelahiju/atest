@@ -543,129 +543,26 @@ password | string | yes | The current password of user
 }
 ```
 
-### Following
+### Get report by id
 > Get account holders which following by current user
 > Also returns Notice of passing, Funeral details .. incase current user has permission
 
-* Path: `/api/v1/user/friendship/following`
+* Path: `/api/v2/reports/:report_id`
 * Method: `GET`
 * Authenticate: `yes`
 * Parameters:
-
-Field | Type | Required | Description
---------- | ------- | ------- | -----------
-level | string | `yes` | The filter for frienship level. Allowed values: `trusted_friend`, `lifelink`
-page | integer | no | The page number
-per | integer | no | The page size
-sort | string | no | The sort field. Sortable fields: `account_holder_first_name`, `account_holder_last_name` , `account_holder_full_name`, `status`, `created_at`
-order | string | no | The sort direction
-
-* Request example:
-
-```json
-{
-    "level": "trusted_friend",
-    "page": 1,
-    "per": 10,
-    "sort": "account_holder_full_name",
-    "order": "asc"
-}
-```
 
 * **Success response(200 OK)**:
 ```json
 {
     "http_status_code": 200,
-    "users": [
-        {
-            "id": 1,
-            "first_name": "Someone1",
-            "middle_name": null,
-            "last_name": null,
-            "email": "someone1@example.com",
-            "level": "trusted_friend",
-            "status": "pending",
-            "invite_token": null,
-            "avatar": {
-                "origin": "http://example.com/path/to/image.png",
-                "thumb": "http://example.com/path/to/image.png"
-            },
-            "death_notice": null,
-            "invite_sent_at": null,
-            "account_holder": {
-                "id": 1,
-                "first_name": "Someone1",
-                "middle_name": null,
-                "last_name": null,
-                "email": "someone1@example.com",
-                "avatar": {
-                    "origin": "http://example.com/path/to/image.png",
-                    "thumb": "http://example.com/path/to/image.png"
-                },
-            }
-        },
-        {
-            "id": 2,
-            "first_name": "Someone2",
-            "middle_name": null,
-            "last_name": null,
-            "full_name": "Someone2",
-            "email": "someone2@example.com",
-            "avatar": null,
-            "status": "accepted",
-            "invite_token": null,
-            "invite_sent_at": null,
-            "account_holder": {
-                "id": 2,
-                "first_name": "Someone2",
-                "middle_name": null,
-                "last_name": null,
-                "full_name": "Someone2",
-                "email": "someone2@example.com",
-                "avatar": null
-            },
-            "death_notice": {
-                "status": "authorised",
-                "date_of_death": "2016-08-11",
-                "initiated_at": "2016-08-10T09:46:03.000Z",
-                "authorised_at": "2016-08-10T09:46:36.000Z",
-                "setting": {
-                    "content": "Proin eget tortor risus. Lorem ipsum dolor sit amet ...",
-                    "email_receive_condolences": "some.email@example.com",
-                    "address_receive_flowers": "123 Main Street",
-                    "ewake_visibility": "public"
-                },
-                "funeral": {
-                    "location": "123 Main Street",
-                    "time": "2016-08-18T11:55:00.000Z",
-                    "details": null,
-                    "sent_at": "2016-08-10T10:28:11.000Z"
-                },
-                "initiator": {
-                    "id": 3,
-                    "first_name": "Luan 3",
-                    "last_name": null,
-                    "middle_name": null,
-                    "full_name": "Someone4",
-                    "email": "someone3@example.com",
-                    "avatar": null
-                },
-                "authoriser": {
-                    "id": 4,
-                    "first_name": "Someone4",
-                    "last_name": null,
-                    "middle_name": null,
-                    "full_name": "Someone4",
-                    "email": "someone4@example.com",
-                    "avatar": null
-                }
-            }
-        }
-    ],
-    "total": 2,
-    "per": 10,
-    "sort": "created_at",
-    "order": "desc"
+    "report": {
+        "id": 13,
+        "image": null,
+        ......
+        "carting_water": null,
+        "carting_water_cmt": null
+    }
 }
 ```
 
