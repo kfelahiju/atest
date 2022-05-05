@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+
+  <title>dsrt - API documentation</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico" />
+  <script src="/docs/assets/jquery.min.js"></script>
+  <script src="/docs/assets/flatdoc/legacy.js"></script>
+  <script src="/docs/assets/flatdoc/flatdoc.js"></script>
+
+  <link  href="/docs/assets/flatdoc/theme-white/style.css" rel='stylesheet'>
+  <link  href="/docs/assets/hljs/default.css" rel='stylesheet'>
+  <script src="/docs/assets/flatdoc/theme-white/script.js"></script>
+  <script src="/docs/assets/hljs/highlight.min.js"></script>
+  <script src="/docs/assets/hljs/json.min.js"></script>
+
+  <meta content="DSRT API documentation" property="og:title">
+  <meta content="API Documentation" name="description">
+
+  <script>
+    Flatdoc.run({
+      fetcher: Flatdoc.file('/docs/apis.md'),
+      highlight: function (code, lang) {
+        if (lang === 'json') {
+          return hljs.highlight('json', code).value;
+        } else {
+          return code;
+        }
+      },
+    });
+  </script>
+  <style>
+    body {
+      /* Increase a bit font size */
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body role='flatdoc' class='no-literate big-h3'>
+  <div class='header'>
+    <div class='left'>
+      <h1>DSRT - API Documentation 1.0</h1>
+    </div>
+    <div class='right'>
+      <img src="/docs/logo.png" alt="">
+    </div>
+  </div>
+
+  <div class='content-root'>
+    <div class='menubar'>
+      <div class='menu section' role='flatdoc-menu'></div>
+    </div>
+    <div role='flatdoc-content' class='content'></div>
+  </div>
+</body>
+</html>
